@@ -12,7 +12,7 @@ def stop():
         if thread != threading.current_thread:
             thread.join()
 
-@log.logged
+@log.wrap
 class Thread:
     @log.ignore
     def __init__(self, limit=sys.maxsize, name=None):
@@ -34,6 +34,9 @@ class Thread:
     def stop(self):
         for worker in self.workers:
             self.queue.put(None)
+        self.join()
+
+    def join(self):
         for worker in self.workers:
             worker.join()
 
